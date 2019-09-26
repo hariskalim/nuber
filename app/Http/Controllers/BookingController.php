@@ -45,4 +45,29 @@ class BookingController extends Controller
 
         return $status;
   }
+  public function cancel_booking(Request $request){
+    $status = 100;
+      try {
+          // validate code
+          $validator = Validator::make($request->all(), [
+              'user_id'        => 'required|numeric',
+              'reference_code' => 'required|exists:bookings,reference_code'
+            ]);
+          if ($validator->fails()) {
+              return \Response::json(['status' => false, 'errors' => $validator->errors() ],406);
+          }  
+          // end validation 
+          if(booking::where(['user_id' => $request->user_id,'reference_code' => $request->reference_code])->get()->count() == 1){
+            if(booking::where(['reference_code' => $request->reference_code])->update([
+                'status' => 'cancel'
+             ])){
+                return \Response::json(['status' => true],200);              
+            }
+         }
+         return \Response::json(['status' => false ],406);
+      } catch (Exception $e) {
+          $status =   $e->getMessage();
+      }
+      return $status;
+  }
 }
