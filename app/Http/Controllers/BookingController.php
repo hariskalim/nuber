@@ -70,4 +70,13 @@ class BookingController extends Controller
       }
       return $status;
   }
+  public function list_booking(Request $request){
+      $status = 100;
+      try {
+             return \Response::json(['status' => true, 'response' => booking::join('users','users.id', '=' , 'bookings.user_id')->join('car_types','car_types.id', '=' , 'bookings.car_type_id')->get(['bookings.id as id','users.name as name','car_types.name as car_type','bookings.status','bookings.reference_code','bookings.created_at','bookings.updated_at'])],200);              
+      } catch (Exception $e) {
+          $status =   $e->getMessage();
+      }
+      return $status; 
+  }
 }

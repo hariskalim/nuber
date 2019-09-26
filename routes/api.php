@@ -18,3 +18,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::POST('create-booking', 'BookingController@create_booking');
 Route::POST('cancel-booking', 'BookingController@cancel_booking');
+Route::get('list-booking', 'BookingController@list_booking');
